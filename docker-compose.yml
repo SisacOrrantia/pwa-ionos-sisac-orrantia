@@ -7,8 +7,17 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      # Certificados SSL generados por Certbot en el host
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      # Para la renovacion de Certbot
+      - certbot-webroot:/var/www/certbot:ro
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost/"]
       interval: 30s
       timeout: 5s
       retries: 3
+
+volumes:
+  certbot-webroot:
